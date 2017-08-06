@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+		if(s.length()<=1)	return s.length();
+		int locs[256]; //保存字符上一次出现的位置
+		int d[s.length()];
+		memset(locs, -1, sizeof(locs));
+		memset(d, 1, sizeof(d));
+		int index = 0;
+		int maxlen = 0;
+		while (index < s.length()) {
+			if (locs[s[index]] == -1) {
+				locs[s[index]] = index;
+				if(index>0)
+					d[index] = d[index - 1] + 1;
+				else
+					d[index] = 1;
+				if (maxlen < d[index])
+					maxlen = d[index];
+			} else {
+				int temp = index - locs[s[index]];
+				if (temp > d[index - 1] + 1)
+					d[index] = d[index - 1] + 1;
+				else
+					d[index] = temp;
+				maxlen = d[index] > maxlen ? d[index] : maxlen;
+				locs[s[index]] = index;
+			}
+			index++;
+		}
+		return maxlen;
+    }
+};
